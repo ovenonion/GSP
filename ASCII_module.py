@@ -12,17 +12,11 @@ def convert_ASCII(image, imgx, col):
 
     imag = Image.open(image)
 
-    # imag = imag.convert('L')
     imag = imag.convert('RGBA')
 
     # coordinates of the pixel
     imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
     imag1 = imag.resize((imgx, int(imgy)))
-    print(imag.size)
-    print(imag1.size)
-
-
-    # imag1.show()
 
     def pixel_check(X, Y, imgx, imgy):
         if Y < imag1.height:
@@ -46,7 +40,7 @@ def convert_ASCII(image, imgx, col):
 
                 x = 0
                 y = Y + 1
-                # print(y)
+
                 ascii.convert_num(brightness, col, R, G, B)
                 if col:
                     print_chars_C()
@@ -75,6 +69,7 @@ def convert_ASCII(image, imgx, col):
         print("Can't have image bigger than 215")
     else:
         pixel_check(0, 0, imgx, imgy)
+
 
 def convert_photo(image, imgx):
 
@@ -113,7 +108,7 @@ def convert_photo(image, imgx):
                 y = Y + 1
                 # print(y)
                 ascii.convert_num2(R, G, B)
-                if col == True:
+                if col:
                     print_chars_C()
                 else:
                     print_chars_BW()
@@ -145,9 +140,7 @@ def convert_photo(image, imgx):
         pixel_check(0, 0, imgx, imgy)
 
 
-
-
-def convert_cam(imgx,col,type):
+def convert_cam(imgx, col, type):
     cam = cv2.VideoCapture(0)
 
     cv2.namedWindow("test")
@@ -163,87 +156,79 @@ def convert_cam(imgx,col,type):
 
         img_name = "opencv_frame_{}.png".format(img_counter)
         cv2.imwrite(img_name, frame)
-        print("{} written!".format(img_name))
-        cam_convert(imgx,col,type)
+        cam_convert(imgx, col, type)
         break
 
     cam.release()
 
     cv2.destroyAllWindows()
 
-def cam_convert(imgx,col,type):
 
-        image = "opencv_frame_0.png"
-        imag = Image.open(image)
+def cam_convert(imgx, col, type):
 
-        imag = imag.convert('RGBA')
+    image = "opencv_frame_0.png"
+    imag = Image.open(image)
 
-        imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
-        imag1 = imag.resize((imgx, int(imgy)))
+    imag = imag.convert('RGBA')
 
-        print(imag.size)
-        print(imag1.size)
+    imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
+    imag1 = imag.resize((imgx, int(imgy)))
 
-        # imag1.show()
+    def pixel_check2(X, Y, imgx, imgy, type):
+        if Y < imag1.height:
+            if X < imag1.width:
+                pixelRGB = imag1.getpixel((X, Y))
 
-        def pixel_check2(X, Y, imgx, imgy, type):
-            if Y < imag1.height:
-                if X < imag1.width:
-                    pixelRGB = imag1.getpixel((X, Y))
-                    # print(imag.getpixel((X,Y)))
-                    R, G, B, A = pixelRGB
+                R, G, B, A = pixelRGB
 
-                    brightness = sum([R, G, B]) / 3
+                brightness = sum([R, G, B]) / 3
 
-                    x = X + 1
-                    y = Y
-                    # print(x,y)
-                    if type:
-                        ascii.convert_num(brightness, col, R, G, B)
-                    else:
-                        ascii.convert_num2(R, G, B)
-                    pixel_check2(x, y, imgx, imgy,type)
-                elif X == imag1.width and Y <= imag1.height:
-                    pixelRGB = imag.getpixel((X, Y))
-                    R, G, B, A = pixelRGB
+                x = X + 1
+                y = Y
 
-                    brightness = sum([R, G, B]) / 3
-
-                    x = 0
-                    y = Y + 1
-                    # print(y)
-                    if type:
-                        ascii.convert_num(brightness, col, R, G, B)
-                    else:
-                        ascii.convert_num2(R, G, B)
-                    if col:
-                        print_chars_C()
-                    else:
-                        print_chars_BW()
-                    pixel_check2(x, y, imgx, imgy,type)
-                elif Y > imag1.height:
-                    print("")
+                if type:
+                    ascii.convert_num(brightness, col, R, G, B)
                 else:
-                    print('')
-            else:
+                    ascii.convert_num2(R, G, B)
+                pixel_check2(x, y, imgx, imgy,type)
+            elif X == imag1.width and Y <= imag1.height:
+                pixelRGB = imag.getpixel((X, Y))
+                R, G, B, A = pixelRGB
+
+                brightness = sum([R, G, B]) / 3
+
+                x = 0
+                y = Y + 1
+
+                if type:
+                    ascii.convert_num(brightness, col, R, G, B)
+                else:
+                    ascii.convert_num2(R, G, B)
+                if col:
+                    print_chars_C()
+                else:
+                    print_chars_BW()
+                pixel_check2(x, y, imgx, imgy,type)
+            elif Y > imag1.height:
                 print("")
-
-        def print_chars_BW():
-            if len(ascii.art) > imgx:
-                del (ascii.art[-1])
-            print(" ".join(ascii.art))
-            ascii.art.clear()
-
-        def print_chars_C():
-            if len(ascii.art) > imgx:
-                del (ascii.art[-1])
-            print("".join(ascii.art))
-            ascii.art.clear()
-
-        if imgx > 215:
-            print("Can't have image bigger than 215")
+            else:
+                print('')
         else:
-            pixel_check2(0, 0, imgx, imgy,type)
+            print("")
 
+    def print_chars_BW():
+        if len(ascii.art) > imgx:
+            del (ascii.art[-1])
+        print(" ".join(ascii.art))
+        ascii.art.clear()
 
+    def print_chars_C():
+        if len(ascii.art) > imgx:
+            del (ascii.art[-1])
+        print("".join(ascii.art))
+        ascii.art.clear()
 
+    if imgx > 215:
+        print("Can't have image bigger than 215")
+    else:
+        pixel_check2(0, 0, imgx, imgy,type)
