@@ -21,11 +21,11 @@ def convert_cam():
     imgx = int(input("Please enter the value for the length of the image. "))
     imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
     imag1 = imag.resize((imgx, int(imgy)))
-    inp = input("Press '1' if you want the image to print in black and white, or '2' if you want it to print in colour")
-    if inp == '1':
-        col = False
-    elif inp == '2':
+    inp = input("Do you want the image in colour? y/n")
+    if inp == 'y':
         col = True
+    else:
+        col = False
     print(imag.size)
     print(imag1.size)
 
