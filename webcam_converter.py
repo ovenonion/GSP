@@ -4,6 +4,7 @@ import sys
 import sqlite3
 import time
 
+
 def convert_cam():
 
     col = False
@@ -14,7 +15,6 @@ def convert_cam():
     image = "opencv_frame_0.png"
     imag = Image.open(image)
 
-    # imag = imag.convert('L')
     imag = imag.convert('RGBA')
 
     # coordinates of the pixel
@@ -29,94 +29,81 @@ def convert_cam():
     print(imag.size)
     print(imag1.size)
 
+    def pixel_check(x, y, imgx, imgy):
+        if y < imag1.height:
+            if x < imag1.width:
+                pixelrgb = imag1.getpixel((x, y))
+                r, g, b, a = pixelrgb
 
-    # imag1.show()
+                brightness = sum([r, g, b]) / 3
 
-    def pixel_check(X, Y, imgx, imgy):
-        if Y < imag1.height:
-            if X < imag1.width:
-                pixelRGB = imag1.getpixel((X, Y))
-                # print(imag.getpixel((X,Y)))
-                R, G, B, A = pixelRGB
+                xpos = x + 1
+                ypos = y
+                ascii.convert_num(brightness, col, r, g, b)
+                pixel_check(xpos, ypos, imgx, imgy)
+            elif x == imag1.width and y <= imag1.height:
+                pixelrgb = imag.getpixel((x, y))
+                r, g, b, a = pixelrgb
 
-                brightness = sum([R, G, B]) / 3
+                brightness = sum([r, g, b]) / 3
 
-                x = X + 1
-                y = Y
-                # print(x,y)
-                ascii.convert_num(brightness, col, R, G, B)
-                pixel_check(x, y, imgx, imgy)
-            elif X == imag1.width and Y <= imag1.height:
-                pixelRGB = imag.getpixel((X, Y))
-                R, G, B, A = pixelRGB
-
-                brightness = sum([R, G, B]) / 3
-
-                x = 0
-                y = Y + 1
-                # print(y)
-                ascii.convert_num(brightness, col, R, G, B)
-                if col == True:
-                    print_chars_C()
+                xpos = 0
+                ypos = y + 1
+                ascii.convert_num(brightness, col, r, g, b)
+                if not col:
+                    print_chars_c()
                 else:
-                    print_chars_BW()
-                pixel_check(x, y, imgx, imgy)
-            elif Y > imag1.height:
+                    print_chars_bw()
+                pixel_check(xpos, ypos, imgx, imgy)
+            elif y > imag1.height:
                 print("")
         else:
             save = input("Do you want to save your image to a database?(y/n)")
             if save == 'y':
-                insert_UI()
+                insert_ui()
             else:
                 print("")
 
+    def pixel_check_db(x, y, imgx, imgy):
+        if y < imag1.height:
+            if x < imag1.width:
+                pixelrgb = imag1.getpixel((x, y))
+                r, g, b, a = pixelrgb
 
-    def pixel_check_db(X, Y, imgx, imgy):
-        if Y < imag1.height:
-            if X < imag1.width:
-                pixelRGB = imag1.getpixel((X, Y))
-                # print(imag.getpixel((X,Y)))
-                R, G, B, A = pixelRGB
+                brightness = sum([r, g, b]) / 3
 
-                brightness = sum([R, G, B]) / 3
+                xpos = x + 1
+                ypos = y
+                ascii.convert_num3(brightness, col, r, g, b)
+                pixel_check_db(xpos, ypos, imgx, imgy)
+            elif x == imag1.width and y <= imag1.height:
+                pixelrgb = imag.getpixel((x, y))
+                r, g, b, a = pixelrgb
 
-                x = X + 1
-                y = Y
-                # print(x,y)
-                ascii.convert_num3(brightness, col, R, G, B)
-                pixel_check_db(x, y, imgx, imgy)
-            elif X == imag1.width and Y <= imag1.height:
-                pixelRGB = imag.getpixel((X, Y))
-                R, G, B, A = pixelRGB
+                brightness = sum([r, g, b]) / 3
 
-                brightness = sum([R, G, B]) / 3
-
-                x = 0
-                y = Y + 1
-                # print(y)
-                ascii.convert_num3(brightness, col, R, G, B)
+                xpos = 0
+                ypos = y + 1
+                ascii.convert_num3(brightness, col, r, g, b)
                 if col:
-                    print_chars_C()
+                    print_chars_c()
                 else:
-                    print_chars_BW()
-                pixel_check_db(x, y, imgx, imgy)
+                    print_chars_bw()
+                pixel_check_db(xpos, ypos, imgx, imgy)
         else:
             print("")
 
-
-    def print_chars_BW():
+    def print_chars_bw():
         if len(ascii.art) > imgx:
             del (ascii.art[-1])
         print(" ".join(ascii.art))
         ascii.art.clear()
 
-
-    def print_chars_C():
+    def print_chars_c():
         if len(ascii.art) > imgx:
             del (ascii.art[-1])
         print("".join(ascii.art))
         ascii.art.clear()
-
 
     def insert_data(values):
         with sqlite3.connect("ASCII.db") as db:
@@ -125,13 +112,11 @@ def convert_cam():
             cursor.execute(sql, values)
             db.commit()
 
-
-    def insert_UI():
+    def insert_ui():
         product_name = input("Please enter name of new product.\n")
         art = image
         print(art)
         product = (product_name, art)
-        # print(product)
         print("Adding %s to Products" % product_name)
         time.sleep(1.0)
         print(".")
@@ -144,8 +129,8 @@ def convert_cam():
         time.sleep(1.0)
         insert_data(product)
 
-
     if imgx > 215:
         print("Can't have image bigger than 215")
     else:
         pixel_check(0, 0, imgx, imgy)
+        
