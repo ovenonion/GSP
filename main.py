@@ -39,25 +39,25 @@ def pixel_check(x, y, imgx, imgy):
         if x < imag1.width:
             pixelrgb = imag1.getpixel((x, y))
 
-            R, G, B, A = pixelrgb
+            r, g, b, a = pixelrgb
 
-            brightness = sum([R, G, B]) / 3
+            brightness = sum([r, g, b]) / 3
 
             xpos = x + 1
             ypos = y
 
-            ascii.convert_num(brightness, col, R, G, B)
+            ascii.convert_num(brightness, col, r, g, b)
             pixel_check(xpos, ypos, imgx, imgy)
         elif x == imag1.width and y <= imag1.height:
             pixelrgb = imag.getpixel((x, y))
-            R, G, B, A = pixelrgb
+            r, g, b, a = pixelrgb
 
-            brightness = sum([R, G, B]) / 3
+            brightness = sum([r, g, b]) / 3
 
             xpos = 0
             ypos = y+1
 
-            ascii.convert_num(brightness, col, R, G, B)
+            ascii.convert_num(brightness, col, r, g, b)
             if col:
                 print_chars_c()
             else:
@@ -90,3 +90,4 @@ if not error:
         pixel_check(0, 0, imgx, imgy)
 else:
     print('')
+    
