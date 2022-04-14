@@ -2,7 +2,7 @@
 Grade 12 computer studies group study project
 
 
-The Main idea of our GSP is to take any image(.png or .jpg) and print it in ASCII art Takes an image and resizes it to a user imputed dimension. It then asks whether the user wants in color or black and white.
+The Main idea of our GSP is to take any image(.png or .jpg) and print it in ASCII art our code asically takes an image and resizes it to a user imputed dimension. It then asks whether the user wants in color or black and white.
 
 **In order to get best quality black and white image please choose a simple image with a contrasting foreground and background. Images printed in colour will only appear in colour in python console. You can not copy and paste a coloured ASCII image in colour.
 
