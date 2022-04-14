@@ -9,13 +9,27 @@ sys.setrecursionlimit(new_limit)
 
 def convert_ascii(image, imgx, col):
 
+    error = False
+
     imag = Image.open(image)
 
     imag = imag.convert('RGBA')
 
-    # coordinates of the pixel
-    imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
-    imag1 = imag.resize((imgx, int(imgy)))
+    try:
+        imgx = int(imgx)
+        imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
+        imag1 = imag.resize((imgx, int(imgy)))
+        inp = input("Do you want the image in colour? y/n")
+        if inp == 'y':
+            col = True
+        else:
+            col = False
+    except ValueError:
+        error = True
+        print('')
+        print('Error')
+        print('')
+        print('Please input only numbers')
 
     def pixel_check(x, y, imgx, imgy):
         if y < imag1.height:
@@ -61,22 +75,33 @@ def convert_ascii(image, imgx, col):
         print("".join(ascii.art))
         ascii.art.clear()
 
-    if imgx > 215:
-        print("Can't have image bigger than 215")
+    if not error:
+        if imgx * imgy > 29070:
+            print("Can't have more than 29070 pixels")
+        else:
+            pixel_check(0, 0, imgx, imgy)
     else:
-        pixel_check(0, 0, imgx, imgy)
+        print('')
 
 
 def convert_photo(image, imgx):
+
+    error = False
+
     imag = Image.open(image)
 
     imag = imag.convert('RGBA')
 
-    # coordinates of the pixel
-    imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
-    imag1 = imag.resize((imgx, int(imgy)))
-    print(imag.size)
-    print(imag1.size)
+    try:
+        imgx = int(imgx)
+        imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
+        imag1 = imag.resize((imgx, int(imgy)))
+    except ValueError:
+        error = True
+        print('')
+        print('Error')
+        print('')
+        print('Please input only numbers')
 
     def pixel_check(x, y, imgx, imgy):
         col = True
@@ -126,10 +151,13 @@ def convert_photo(image, imgx):
         print("".join(ascii.art))
         ascii.art.clear()
 
-    if imgx > 215:
-        print("Can't have image bigger than 215")
+    if not error:
+        if imgx * imgy > 29070:
+            print("Can't have more than 29070 pixels")
+        else:
+            pixel_check(0, 0, imgx, imgy)
     else:
-        pixel_check(0, 0, imgx, imgy)
+        print('')
 
 
 def convert_cam(imgx, col, type):
@@ -158,13 +186,23 @@ def convert_cam(imgx, col, type):
 
 def cam_convert(imgx, col, type):
 
+    error = False
+
     image = "opencv_frame_0.png"
     imag = Image.open(image)
 
     imag = imag.convert('RGBA')
 
-    imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
-    imag1 = imag.resize((imgx, int(imgy)))
+    try:
+        imgx = int(imgx)
+        imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
+        imag1 = imag.resize((imgx, int(imgy)))
+    except ValueError:
+        error = True
+        print('')
+        print('Error')
+        print('')
+        print('Please input only numbers')
 
     def pixel_check2(x, y, imgx, imgy, type):
         if y < imag1.height:
@@ -220,7 +258,10 @@ def cam_convert(imgx, col, type):
         print("".join(ascii.art))
         ascii.art.clear()
 
-    if imgx > 215:
-        print("Can't have image bigger than 215")
+    if not error:
+        if imgx * imgy > 29070:
+            print("Can't have more than 29070 pixels")
+        else:
+            pixel_check2(0, 0, imgx, imgy, type)
     else:
-        pixel_check2(0, 0, imgx, imgy, type)
+        print('')
