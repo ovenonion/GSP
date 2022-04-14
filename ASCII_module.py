@@ -19,11 +19,7 @@ def convert_ascii(image, imgx, col):
         imgx = int(imgx)
         imgy = (int(imag.size[1])) * (int(imgx) / (int(imag.size[0])))
         imag1 = imag.resize((imgx, int(imgy)))
-        inp = input("Do you want the image in colour? y/n")
-        if inp == 'y':
-            col = True
-        else:
-            col = False
+
     except ValueError:
         error = True
         print('')
@@ -152,8 +148,8 @@ def convert_photo(image, imgx):
         ascii.art.clear()
 
     if not error:
-        if imgx * imgy > 29070:
-            print("Can't have more than 29070 pixels")
+        if imgx * imgy > 28000:
+            print("Can't have more than 28000 pixels")
         else:
             pixel_check(0, 0, imgx, imgy)
     else:
